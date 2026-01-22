@@ -49,7 +49,7 @@ val Typography = Typography(
         fontFamily = Roboto,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp
-    
+
 )
     /* Other default text styles to override
     titleLarge = TextStyle(

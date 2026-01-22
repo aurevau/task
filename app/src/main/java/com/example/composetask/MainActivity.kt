@@ -18,30 +18,37 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            ComposeTaskTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+
+            ComposeTaskTheme() {
+                LoginScreen()
+
             }
         }
     }
 }
 
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun LoginScreenDarkPreview() {
+    ComposeTaskTheme(
+    ) {
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ComposeTaskTheme {
-        Greeting("Android")
+        LoginScreen()
     }
 }
+
+//@Composable
+//fun Greeting(name: String, modifier: Modifier = Modifier) {
+//    Text(
+//        text = "Hello $name!",
+//        modifier = modifier
+//    )
+//}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun GreetingPreview() {
+//    ComposeTaskTheme {
+//        Greeting("Android")
+//    }
+//}
