@@ -27,6 +27,31 @@ val LightBorderGray = Color(0xFFE5E5E5)
 val DarkBorderGray = Color(0xFF444444)
 
 
+val espresso = Color(0xFF3E2723)
+val peony = Color(0xFFF4C9D6)
+
+
+val lilac = Color(0xFFCBA2C9)
+val cream = Color(0xFFFEFBCE)
+
+val blush = Color(0xFFE36887)
+val morningButter = Color(0xFFF3D98F)
+
+val celadon = Color(0xFFA8D3A8)
+val chocolatePlum = Color(0xFF553832)
+
+val softLinen = Color(0xFFF5F1E6)
+val cherry = Color(0xFFF9A8BB)
+
+val hotFuchsia = Color(0xFFF8395A)
+val cottonRose = Color(0xFFEEB3B5)
+
+val plumNoir = Color(0xFF341F28)
+val coolBlue = Color(0xFFD8EFFD)
+
+
+
+
 
 val ColorScheme.focusedTextFieldText: Color
     @Composable

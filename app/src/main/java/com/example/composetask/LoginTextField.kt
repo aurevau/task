@@ -27,10 +27,19 @@ fun LoginTextField(
             Text(text = label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onBackground)
         },
         colors = TextFieldDefaults.colors(
-            unfocusedPlaceholderColor = MaterialTheme.colorScheme.unFocusedTextFieldText,
-            focusedPlaceholderColor = MaterialTheme.colorScheme.textFieldContainer,
-            focusedContainerColor = MaterialTheme.colorScheme.focusedTextFieldText
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
 
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.outline,
+
+            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+
+            cursorColor = MaterialTheme.colorScheme.primary
 
         ),
         trailingIcon = {

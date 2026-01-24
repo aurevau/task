@@ -9,8 +9,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.composetask.ui.theme.AppTheme
 import com.example.composetask.ui.theme.ComposeTaskTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,9 +23,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            var selectedTheme by rememberSaveable {
+                mutableStateOf(AppTheme.BLOSSOM)
+            }
+            ComposeTaskTheme(
+                theme = selectedTheme
+            ) {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    LoginScreen(currentTheme = selectedTheme,
+                        onThemeSelected = { selectedTheme = it }
+                    )
+                }
 
-            ComposeTaskTheme() {
-                LoginScreen()
 
             }
         }
@@ -31,9 +45,15 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun LoginScreenDarkPreview() {
     ComposeTaskTheme(
+        theme = AppTheme.BLOSSOM,
+        darkTheme = false,
+        dynamicColor =  false
     ) {
 
-        LoginScreen()
+        LoginScreen(
+            currentTheme = AppTheme.BLOSSOM,
+            onThemeSelected = {}
+        )
     }
 }
 
