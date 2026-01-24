@@ -1,5 +1,6 @@
 package com.example.composetask
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -21,9 +22,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -32,6 +35,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.composetask.presentation.sign_in.SignInState
 import com.example.composetask.ui.theme.AppTheme
 import com.example.composetask.ui.theme.ComposeTaskTheme
 import com.example.composetask.ui.theme.Roboto
@@ -40,11 +44,19 @@ import com.example.composetask.util.logoForTheme
 
 @Composable
 fun LoginScreen(
+    state: SignInState,
+    onSignInClick: () -> Unit,
     currentTheme: AppTheme,
     onThemeSelected: (AppTheme) -> Unit) {
     Surface( modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
+        val context = LocalContext.current
+        LaunchedEffect(key1 = state.signInError) {
+            state.signInError?.let { error ->
+                Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+            }
+        }
 
 
         Column(modifier = Modifier.fillMaxSize()) {
@@ -100,9 +112,9 @@ fun LoginScreen(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically)
                     {
-                        SocialMediaLogin(icon = R.drawable.google, text = "Google", modifier = Modifier.weight(1f).height(48.dp) ) {
+                        SocialMediaLogin(icon = R.drawable.google, text = "Google", modifier = Modifier.weight(1f).height(48.dp), onClick = onSignInClick)
 
-                        }
+
                         Spacer(modifier = Modifier.width(20.dp))
                         SocialMediaLogin(icon = R.drawable.facebook, text = "Facebook", modifier = Modifier.weight(1f)) {
 
@@ -156,16 +168,16 @@ fun LoginScreen(
 
 }
 
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    ComposeTaskTheme(
-        theme = AppTheme.BLOSSOM,
-        dynamicColor = false
-    ) {
-        LoginScreen(
-            currentTheme = AppTheme.BLOSSOM,
-            onThemeSelected = {}
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun LoginScreenPreview() {
+//    ComposeTaskTheme(
+//        theme = AppTheme.BLOSSOM,
+//        dynamicColor = false
+//    ) {
+//        LoginScreen(
+//            currentTheme = AppTheme.BLOSSOM,
+//            onThemeSelected = {}
+//        )
+//    }
+//}
