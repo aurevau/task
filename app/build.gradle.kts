@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -42,6 +43,13 @@ android {
 }
 
 dependencies {
+
+    implementation("com.google.firebase:firebase-auth-ktx:21.1.0")
+    implementation("com.google.android.gms:play-services-auth:20.4.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.0")
+    implementation("androidx.navigation:navigation-compose:2.5.3")
+    implementation("io.coil-kt:coil-compose:2.2.2")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
