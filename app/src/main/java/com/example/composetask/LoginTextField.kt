@@ -1,5 +1,6 @@
 package com.example.composetask
 
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -8,6 +9,9 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import com.example.composetask.ui.theme.focusedTextFieldText
 import com.example.composetask.ui.theme.textFieldContainer
 import com.example.composetask.ui.theme.unFocusedTextFieldText
@@ -17,12 +21,26 @@ import com.example.composetask.ui.theme.whiteVariant
 fun LoginTextField(
     modifier: Modifier = Modifier,
     label: String,
-    trailing: String
+    trailing: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    isPassword: Boolean = false
+
 ) {
     TextField(
         modifier = modifier,
-        value = "",
-        onValueChange = {},
+        value = value,
+        onValueChange = onValueChange,
+        visualTransformation =
+            if (isPassword) PasswordVisualTransformation()
+            else VisualTransformation.None,
+
+        keyboardOptions = KeyboardOptions(
+            keyboardType = if (isPassword)
+                KeyboardType.Password
+            else
+                KeyboardType.Email
+        ),
         label = {
             Text(text = label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onBackground)
         },
