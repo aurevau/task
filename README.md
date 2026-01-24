@@ -10,7 +10,7 @@ Built as a part of an Android development project as a side project.
 
 
 ## Current Status
-Under development
+Under development, figuring out how to implement everything with Jetpack Compose. The start of this app created with XML is listed in my repositories.
 
 ## App Concept 
 Users will be able to: 
