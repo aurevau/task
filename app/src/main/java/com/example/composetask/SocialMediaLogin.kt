@@ -23,9 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.composetask.ui.theme.gray
-import com.example.composetask.ui.theme.lightGray
-import com.example.composetask.ui.theme.red
+
 
 @Composable
 fun SocialMediaLogin(
@@ -48,7 +46,7 @@ fun SocialMediaLogin(
 
         Spacer(modifier = Modifier.width(5.dp))
 
-        Text(text = text, style = MaterialTheme.typography.labelMedium.copy(color = Color(0xFF647488)))
+        Text(text = text, style = MaterialTheme.typography.labelMedium.copy(color =MaterialTheme.colorScheme.outline))
     }
 }
 

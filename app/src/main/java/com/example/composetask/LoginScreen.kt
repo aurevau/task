@@ -32,22 +32,37 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.composetask.ui.theme.AppTheme
+import com.example.composetask.ui.theme.ComposeTaskTheme
 import com.example.composetask.ui.theme.Roboto
+import com.example.composetask.ui.theme.components.ThemeDropdown
+import com.example.composetask.util.logoForTheme
 
-@Preview
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    currentTheme: AppTheme,
+    onThemeSelected: (AppTheme) -> Unit) {
     Surface( modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
 
 
         Column(modifier = Modifier.fillMaxSize()) {
+
+            Column(
+                modifier = Modifier.padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+
+
+                ThemeDropdown(currentTheme = currentTheme,
+                    onThemeSelected = onThemeSelected)
+            }
             Row(modifier = Modifier.fillMaxWidth()
                 .padding(top = 120.dp),
                 verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Center) {
-                Image( modifier = Modifier.size(72.dp),
-                    painter = painterResource(id = R.drawable.logo),
+                Image(  modifier = Modifier.size(72.dp),
+                    painter = painterResource(id = logoForTheme(currentTheme)),
                     contentDescription = "logo")
             }
 
@@ -78,7 +93,7 @@ fun LoginScreen() {
                 Column(modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(text = "or continue with",
-                        style = MaterialTheme.typography.labelMedium.copy(color = Color(0xFF647488)))
+                        style = MaterialTheme.typography.labelMedium.copy(color = MaterialTheme.colorScheme.outline))
 
                     Spacer(modifier = Modifier.height(20.dp))
                     Row(
@@ -131,8 +146,26 @@ fun LoginScreen() {
 
 
 
+
+
         }
 
 
+    }
+
+
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenPreview() {
+    ComposeTaskTheme(
+        theme = AppTheme.BLOSSOM,
+        dynamicColor = false
+    ) {
+        LoginScreen(
+            currentTheme = AppTheme.BLOSSOM,
+            onThemeSelected = {}
+        )
     }
 }
