@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -24,7 +25,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.example.composetask.presentation.sign_in.AuthTabs
 import com.example.composetask.presentation.sign_in.GoogleAuthUiClient
 import com.example.composetask.presentation.sign_in.HomeScreen
 import com.example.composetask.presentation.sign_in.SignInViewModel
@@ -69,38 +72,7 @@ class MainActivity : ComponentActivity() {
 
     }
 }
-//
-//@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
-//@Composable
-//fun LoginScreenDarkPreview() {
-//    ComposeTaskTheme(
-//        theme = AppTheme.BLOSSOM,
-//        darkTheme = false,
-//        dynamicColor =  false
-//    ) {
-//
-//        LoginScreen(
-//            currentTheme = AppTheme.BLOSSOM,
-//            onThemeSelected = {}
-//        )
-//    }
-//}
 
-//@Composable
-//fun Greeting(name: String, modifier: Modifier = Modifier) {
-//    Text(
-//        text = "Hello $name!",
-//        modifier = modifier
-//    )
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//    ComposeTaskTheme {
-//        Greeting("Android")
-//    }
-//}
 
 @Composable
 fun AuthApp(
@@ -111,71 +83,87 @@ fun AuthApp(
 
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
-    NavHost(navController, startDestination = "sign_in") {
+    NavHost(navController, startDestination = "auth") {
+            navigation(startDestination = "sign_in", route = "auth") {
+                composable("sign_in"){
+                    Column {
+                        AuthTabs(navController)
 
-        composable("sign_in"){
-            val viewModel = viewModel<SignInViewModel>()
-            val state by viewModel.state.collectAsStateWithLifecycle()
+                        val viewModel = viewModel<SignInViewModel>()
+                        val state by viewModel.state.collectAsStateWithLifecycle()
 
 
-            val launcher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.StartIntentSenderForResult(),
-                onResult = {result ->
-                    if (result.resultCode == RESULT_OK) {
-                        scope.launch {
-                            val signInResult = googleAuthUiClient.signInWithIntent(
-                                intent = result.data ?: return@launch
-                            )
-                            viewModel.onSignInResult(signInResult)
+                        val launcher = rememberLauncherForActivityResult(
+                            contract = ActivityResultContracts.StartIntentSenderForResult(),
+                            onResult = {result ->
+                                if (result.resultCode == RESULT_OK) {
+                                    scope.launch {
+                                        val signInResult = googleAuthUiClient.signInWithIntent(
+                                            intent = result.data ?: return@launch
+                                        )
+                                        viewModel.onSignInResult(signInResult)
+                                    }
+                                }
+                            }
+                        )
+
+                        LaunchedEffect(state.isSignInSuccessful) {
+                            if (state.isSignInSuccessful) {
+                                navController.navigate("profile") {
+                                    popUpTo("sign_in") { inclusive = true }
+                                }
+                            }
                         }
-                    }
-                }
-            )
 
-            LaunchedEffect(state.isSignInSuccessful) {
-                if (state.isSignInSuccessful) {
-                    navController.navigate("profile") {
-                        popUpTo("sign_in") { inclusive = true }
-                    }
-                }
-            }
+                        LoginScreen(state = state,
+                            onSignInWithGoogleClick =  {
+                                scope.launch {
+                                    val signInIntentSender = googleAuthUiClient.signIn()
+                                    Log.d("SIGN_IN", "IntentSender = $signInIntentSender")
 
-            LoginScreen(state = state,
-                onSignInWithGoogleClick =  {
-                    scope.launch {
-                        val signInIntentSender = googleAuthUiClient.signIn()
-                        Log.d("SIGN_IN", "IntentSender = $signInIntentSender")
-
-                        if (signInIntentSender == null) {
-                            Log.e("SIGN_IN", "Sign in intent is NULL")
-                            return@launch
-                        }
-                        launcher.launch(
-                            IntentSenderRequest.Builder(
-                                signInIntentSender ?: return@launch
-                            ).build()
+                                    if (signInIntentSender == null) {
+                                        Log.e("SIGN_IN", "Sign in intent is NULL")
+                                        return@launch
+                                    }
+                                    launcher.launch(
+                                        IntentSenderRequest.Builder(
+                                            signInIntentSender ?: return@launch
+                                        ).build()
+                                    )
+                                }
+                            }, onEmailSignIn = {email, password ->
+                                scope.launch {
+                                    Firebase.auth.signInWithEmailAndPassword(email, password)
+                                        .addOnFailureListener {
+                                            Log.e("LOGIN", it.message ?: "")
+                                        }
+                                        .addOnSuccessListener {
+                                            navController.navigate("profile"){ popUpTo(0) }
+                                        }
+                                }
+                            },
+                            currentTheme = currentTheme,
+                            onThemeSelected = onThemeSelected,
+                            onSignUpClick = {
+                                navController.navigate("signup") { popUpTo(0) }
+                            }
                         )
                     }
-                }, onEmailSignIn = {email, password ->
-                    scope.launch {
-                        Firebase.auth.signInWithEmailAndPassword(email, password)
-                            .addOnFailureListener {
-                                Log.e("LOGIN", it.message ?: "")
-                            }
-                            .addOnSuccessListener {
-                                navController.navigate("profile"){ popUpTo(0) }
-                            }
-                    }
-                },
-                currentTheme = currentTheme,
-                onThemeSelected = onThemeSelected,
-                onSignUpClick = {
-                    navController.navigate("signup") { popUpTo(0) }
-                }
-            )
-        }
 
-        composable("signup") {SignUpScreen(navController)}
+
+                }
+                composable("signup") {
+                    Column {
+                        AuthTabs(navController)
+                        SignUpScreen(navController)
+                    }
+                }
+
+
+            }
+
+
+
         composable("home") {HomeScreen(navController)}
         composable("profile") {
             ProfileScreen(
