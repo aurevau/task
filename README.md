@@ -1,16 +1,15 @@
 
 # Task- Android
-This project is an Android implementation of a goal tracking app, built in Kotlin and my first time learning Jetpack Compose.
-Where users create personal or group-based goals, invite friends, track progress and stay accountable through
-updates, media sharing and notifications. 
+This project is an Android implementation of a goal tracking app + chat app, built in Kotlin and my first time learning Jetpack Compose.
+Where users create personal or group-based goals, invite friends, track progress and stay accountable through updates, media sharing and notifications. 
 
 The app focuses on commitment, social motivation, and structured goal-tracking in a clean Material Design UI. 
 
-Built as a part of an Android development project as a side project. 
+Built as a part of my Android development studies as a side project. 
 
 
 ## Current Status
-Under development, figuring out how to implement everything with Jetpack Compose. The start of this app created with XML is listed in my repositories.
+Under development, figuring out how to implement everything with Jetpack Compose. I started creating this app with XML in an earlier repo called quit-or-commit. 
 
 ## App Concept 
 Users will be able to: 
@@ -22,10 +21,13 @@ Users will be able to:
 - Track progress over time
 - Recieve invitations & notifications
 - Manage profile & onboarding flow
+- Chat with goal-members
 
-## Features 
+## Implemented Features 
 - **Firebase Authentication** (Email & Google-Sign-In)
 - Theme settings
+
+## Incoming Features 
 - Onboarding flow for profile creation
 - Goal creation in BottomSheet dialog
 - Member selection with chips + recycler
@@ -39,6 +41,18 @@ Users will be able to:
 - Animated bottom sheet dialogs
 - Notification panel
 - Settings screen & logout
+- Feed timeline for public goals and updates
+- Goal detail screen with updates
+- Comments & reactions
+- Push notifications
+- Friend system
+- Goal streak tracking
+- Analytics dashboard
+- Dark Mode
+- Theme picker
+- Offline caching
+- Better separation of domain logic
+- UI polish & Animations
 
 ## Tech Stack
 - Kotlin
@@ -56,24 +70,11 @@ Users will be able to:
 - ViewBinding
 - Glide
 - Coroutines
+- Coil
 
 
 
 
 
-
-## Future Features
-- Feed timeline for public goals and updates
-- Goal detail screen with updates
-- Comments & reactions
-- Push notifications
-- Friend system
-- Goal streak tracking
-- Analytics dashboard
-- Dark Mode
-- Theme picker
-- Offline caching
-- Better separation of domain logic
-- UI polish & Animations
 
 Created by **Aurelie Vaudan**
