@@ -31,7 +31,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.composetask.auth.AuthViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -39,6 +43,9 @@ import com.google.firebase.ktx.Firebase
 fun SignUpScreen(navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    val authViewModel: AuthViewModel = hiltViewModel()
+    val state by authViewModel.loginState.collectAsStateWithLifecycle()
 
     var isLoading by rememberSaveable { mutableStateOf(false) }
 
@@ -83,15 +90,8 @@ fun SignUpScreen(navController: NavHostController) {
 
             Button(onClick = {
                 isLoading = true
-            Firebase.auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        navController.navigate("sign_in")
-                    } else {
-                        isLoading = false
-                        Toast.makeText(context, "Signup failed ${task.exception?.message}", Toast.LENGTH_LONG).show()
-                    }
-                }
+            authViewModel.signUp(email, password)
+
             }, enabled = isLoginEnabled
 
 

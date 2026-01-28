@@ -1,4 +1,4 @@
-package com.example.composetask
+package com.example.composetask.login
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -37,11 +36,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.composetask.R
+import com.example.composetask.SocialMediaLogin
 import com.example.composetask.presentation.sign_in.SignInState
 import com.example.composetask.ui.theme.AppTheme
 import com.example.composetask.ui.theme.Roboto
@@ -50,7 +49,7 @@ import com.example.composetask.util.logoForTheme
 
 @Composable
 fun LoginScreen(
-    state: SignInState,
+    state: LoginState,
     onSignInWithGoogleClick: () -> Unit,
     onSignUpClick: () -> Unit,
     onEmailSignIn: (String, String) -> Unit,
@@ -59,7 +58,7 @@ fun LoginScreen(
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var isLoading by rememberSaveable { mutableStateOf(false) }
+    val isLoading = state is LoginState.Loading
 
     val isLoginEnabled =
         email.isNotBlank() &&
@@ -69,9 +68,13 @@ fun LoginScreen(
         color = MaterialTheme.colorScheme.background
     ) {
         val context = LocalContext.current
-        LaunchedEffect(key1 = state.signInError) {
-            state.signInError?.let { error ->
-                Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+        LaunchedEffect(state) {
+            if (state is LoginState.Error) {
+                Toast.makeText(
+                    context,
+                    state.message,
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
 
@@ -111,7 +114,6 @@ fun LoginScreen(
                 Button(modifier = Modifier.fillMaxWidth()
                     .height(40.dp),
                     onClick = {
-                        isLoading = true
                         onEmailSignIn(email, password)
                     }, enabled = isLoginEnabled,
                     colors = ButtonDefaults.buttonColors(
@@ -142,11 +144,20 @@ fun LoginScreen(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically)
                     {
-                        SocialMediaLogin(icon = R.drawable.google, text = "Google", modifier = Modifier.weight(1f).height(48.dp), onClick = onSignInWithGoogleClick)
+                        SocialMediaLogin(
+                            icon = R.drawable.google,
+                            text = "Google",
+                            modifier = Modifier.weight(1f).height(48.dp),
+                            onClick = onSignInWithGoogleClick
+                        )
 
 
                         Spacer(modifier = Modifier.width(20.dp))
-                        SocialMediaLogin(icon = R.drawable.facebook, text = "Facebook", modifier = Modifier.weight(1f)) {
+                        SocialMediaLogin(
+                            icon = R.drawable.facebook,
+                            text = "Facebook",
+                            modifier = Modifier.weight(1f)
+                        ) {
 
                         }
 
