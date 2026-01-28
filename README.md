@@ -71,6 +71,7 @@ Users will be able to:
 - Glide
 - Coroutines
 - Coil
+- Hilt
 
 
 
