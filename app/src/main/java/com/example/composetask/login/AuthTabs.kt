@@ -1,4 +1,4 @@
-package com.example.composetask.presentation.sign_in
+package com.example.composetask.login
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Tab
@@ -6,10 +6,7 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.composetask.LoginScreen
 
 @Composable
 fun AuthTabs(navController: NavController) {

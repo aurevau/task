@@ -1,4 +1,4 @@
-package com.example.composetask
+package com.example.composetask.login
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
@@ -12,10 +12,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import com.example.composetask.ui.theme.focusedTextFieldText
-import com.example.composetask.ui.theme.textFieldContainer
-import com.example.composetask.ui.theme.unFocusedTextFieldText
-import com.example.composetask.ui.theme.whiteVariant
 
 @Composable
 fun LoginTextField(
