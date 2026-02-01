@@ -2,8 +2,14 @@ package com.example.composetask.presentation.sign_in
 
 import android.R.attr.label
 import android.R.attr.text
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -27,27 +34,50 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.composetask.auth.AuthViewModel
+import com.example.composetask.login.LoginState
+import com.example.composetask.ui.theme.AppTheme
+import com.example.composetask.ui.theme.ComposeTaskTheme
+import com.example.composetask.util.InitialsAvatar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlin.Unit
 
 @Composable
-fun SignUpScreen(navController: NavHostController) {
+fun SignUpScreen(state: LoginState,
+                 onSignUp: (String, String, String, String?) -> Unit,
+                 onNavigateToLogin: () -> Unit){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
+    var selectedImageUri by rememberSaveable { mutableStateOf<Uri?>(null) }
+
 
     val authViewModel: AuthViewModel = hiltViewModel()
     val state by authViewModel.loginState.collectAsStateWithLifecycle()
 
-    var isLoading by rememberSaveable { mutableStateOf(false) }
+    val isLoading = state is LoginState.Loading
+
+
+    val imagePicker =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.PickVisualMedia()
+        ) { uri ->
+            selectedImageUri = uri
+        }
 
     val isLoginEnabled =
         email.isNotBlank() &&
@@ -62,6 +92,32 @@ fun SignUpScreen(navController: NavHostController) {
             Text("Sign Up", style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onBackground)
             Spacer(modifier = Modifier.height(24.dp))
+
+
+            Box(modifier = Modifier.size(120.dp)
+                .clip(CircleShape)
+                .clickable{imagePicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))}
+                .background(MaterialTheme.colorScheme.onBackground),
+                contentAlignment = Alignment.Center) {
+
+                if (selectedImageUri != null) {
+                    Image(painter = rememberAsyncImagePainter(selectedImageUri),
+                        contentDescription = "profilePicture",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize())
+                } else {
+                    InitialsAvatar(username)
+                }
+            }
+
+            OutlinedTextField(
+                value = username,
+                onValueChange = {username = it},
+                label = {Text ("Username")},
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+
+            )
 
             OutlinedTextField(
                 value = email,
@@ -89,10 +145,11 @@ fun SignUpScreen(navController: NavHostController) {
             val context = LocalContext.current
 
             Button(onClick = {
-                isLoading = true
-            authViewModel.signUp(email, password)
+                onSignUp(username, email, password, selectedImageUri.toString())
+//            authViewModel.signUp(username, email, password, photoUrl = selectedImageUri?.toString())
 
-            }, enabled = isLoginEnabled
+            }, enabled = isLoginEnabled,
+
 
 
                 ) {  if (isLoading) {
@@ -112,11 +169,17 @@ fun SignUpScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(8.dp))
             TextButton(onClick = {
-                navController.navigate("sign_in"){
-                    popUpTo("signup") {inclusive = true}
-                }
+                onNavigateToLogin()
             }) { Text("Already have an account? Login") }
 
         }
     }
 }
+
+//@Preview(showBackground = true)
+//@Composable
+//fun SignUpScreenPreview() {
+//
+//        SignUpScreen()
+//
+//}

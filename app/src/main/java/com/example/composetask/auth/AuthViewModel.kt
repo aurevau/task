@@ -7,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.composetask.login.LoginState
 import com.example.composetask.presentation.sign_in.GoogleAuthUiClient
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -55,15 +57,18 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun signUp(email: String, password: String) {
+    fun signUp(username: String, email: String, password: String, photoUrl: String?) {
         viewModelScope.launch {
             _loginState.value = LoginState.Loading
 
             try {
                 authRepository.signUp(email, password)
-                _currentUser.value = authRepository.getCurrentUser()
+                authRepository.updateProfile(username, photoUrl)
+                val updatedUser = authRepository.getCurrentUser()
+                _currentUser.value = updatedUser
                 _authProvider.value = AuthProvider.EMAIL
-                _currentUser.value = authRepository.getCurrentUser()
+                _loginState.value = LoginState.Success
+
             }  catch (exception: Exception) {
                 _loginState.value = LoginState.Error(exception.message ?: "Sign up failed")
 

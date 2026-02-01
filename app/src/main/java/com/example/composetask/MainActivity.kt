@@ -2,7 +2,6 @@ package com.example.composetask
 
 import android.app.Activity.RESULT_OK
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -18,9 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
@@ -29,18 +26,13 @@ import com.example.composetask.auth.AuthViewModel
 import com.example.composetask.login.LoginScreen
 import com.example.composetask.login.AuthTabs
 import com.example.composetask.login.LoginState
-import com.example.composetask.presentation.sign_in.GoogleAuthUiClient
 import com.example.composetask.presentation.sign_in.HomeScreen
-import com.example.composetask.presentation.sign_in.SignInViewModel
 import com.example.composetask.presentation.sign_in.SignUpScreen
 import com.example.composetask.presentation.sign_in.UserData
 import com.example.composetask.presentation.sign_in.profile.ProfileScreen
 import com.example.composetask.ui.theme.AppTheme
 import com.example.composetask.ui.theme.ComposeTaskTheme
-import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -89,7 +81,6 @@ fun AuthApp(
 
                         val authViewModel: AuthViewModel = hiltViewModel()
                         val state by authViewModel.loginState.collectAsStateWithLifecycle()
-                        val user by authViewModel.currentUser.collectAsStateWithLifecycle()
 
                         val currentUser by authViewModel.currentUser.collectAsStateWithLifecycle()
 
@@ -112,13 +103,13 @@ fun AuthApp(
                             }
                         )
 
-                        LaunchedEffect(state) {
-                            if (state is LoginState.Success) {
-                                navController.navigate("profile") {
-                                    popUpTo("sign_in") { inclusive = true }
-                                }
-                            }
-                        }
+//                        LaunchedEffect(state) {
+//                            if (state is LoginState.Success) {
+//                                navController.navigate("profile") {
+//                                    popUpTo("sign_in") { inclusive = true }
+//                                }
+//                            }
+//                        }
 
                         LoginScreen(
                             state = state,
@@ -148,38 +139,57 @@ fun AuthApp(
 
                 }
                 composable("signup") {
+                    val authViewModel: AuthViewModel = hiltViewModel()
+                    val state by authViewModel.loginState.collectAsStateWithLifecycle()
+                    val currentUser by authViewModel.currentUser.collectAsStateWithLifecycle()
+
+                    LaunchedEffect(currentUser) {
+                        if(currentUser != null) {
+                            navController.navigate("profile") {
+                                popUpTo("auth") {inclusive = true}
+                            }
+                        }
+                    }
                     Column {
                         AuthTabs(navController)
-                        SignUpScreen(navController)
+                        SignUpScreen(
+                            state = state,
+                            onSignUp = {username, email, password, photoUrl ->
+                                authViewModel.signUp(username, email, password, photoUrl)
+                            }, onNavigateToLogin = {navController.navigate("sign_in")})
                     }
                 }
+
+                composable("home") {HomeScreen(navController)}
+                composable("profile") {
+                    val authViewModel: AuthViewModel = hiltViewModel()
+                    val user by authViewModel.currentUser.collectAsStateWithLifecycle()
+
+                    ProfileScreen(
+                        userData = user?.let{
+                            UserData(
+                                userId = it.uid,
+                                username = it.displayName ?: it.email ?: "?",
+                                profilePictureUrl = it.photoUrl?.toString()
+                            )
+                        },
+                        onSignOut = {
+                            scope.launch {
+                                authViewModel.signOut()
+                                navController.navigate("sign_in") {
+                                    popUpTo("profile") { inclusive = true }
+                                }
+                            }
+                        }
+                    )
+                }
+
+            }
 
 
             }
 
 
 
-        composable("home") {HomeScreen(navController)}
-        composable("profile") {
-            val authViewModel: AuthViewModel = hiltViewModel()
-            val user by authViewModel.currentUser.collectAsStateWithLifecycle()
 
-            ProfileScreen(
-                userData = user?.let{
-                    UserData(
-                        userId = it.uid,
-                        username = it.displayName,
-                        profilePictureUrl = it.photoUrl?.toString()
-                        )
-                },
-                onSignOut = {
-                    scope.launch {
-                        authViewModel.signOut()
-                        navController.navigate("sign_in") { popUpTo("auth") {inclusive = true} }
-                    }
-                }
-            )
-        }
-
-    }
 }
