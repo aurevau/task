@@ -21,8 +21,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.composetask.User
-import com.example.composetask.util.InitialsAvatar
+import com.example.composetask.model.User
+import com.example.composetask.core.util.InitialsAvatar
 
 @Composable
 fun ProfileScreen(

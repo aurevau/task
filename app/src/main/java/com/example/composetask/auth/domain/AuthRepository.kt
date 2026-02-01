@@ -1,12 +1,7 @@
-package com.example.composetask.auth
+package com.example.composetask.auth.domain
 
-import android.net.Uri
-import com.example.composetask.User
+import com.example.composetask.model.User
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.auth.ktx.userProfileChangeRequest
-import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.tasks.await
 
 interface AuthRepository {
     suspend fun login(email: String, password: String)

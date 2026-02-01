@@ -1,4 +1,4 @@
-package com.example.composetask.presentation.sign_in
+package com.example.composetask.auth.model
 
 data class SignInState(
     val isSignInSuccessful: Boolean = false,

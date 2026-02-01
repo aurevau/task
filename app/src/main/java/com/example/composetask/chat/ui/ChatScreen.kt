@@ -1,4 +1,4 @@
-package com.example.composetask.chat
+package com.example.composetask.chat.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +31,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.composetask.model.Message
+import com.example.composetask.chat.ChatViewModel
+import com.example.composetask.chat.model.Message
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable

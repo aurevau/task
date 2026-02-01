@@ -1,4 +1,4 @@
-package com.example.composetask.login
+package com.example.composetask.auth.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Tab

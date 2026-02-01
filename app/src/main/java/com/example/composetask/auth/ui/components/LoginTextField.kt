@@ -1,4 +1,4 @@
-package com.example.composetask.login
+package com.example.composetask.auth.ui.components
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme

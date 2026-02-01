@@ -1,9 +1,6 @@
-package com.example.composetask.presentation.sign_in
+package com.example.composetask.auth.ui
 
-import android.R.attr.label
-import android.R.attr.text
 import android.net.Uri
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -39,21 +36,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.composetask.auth.AuthViewModel
-import com.example.composetask.login.LoginState
-import com.example.composetask.ui.theme.AppTheme
-import com.example.composetask.ui.theme.ComposeTaskTheme
-import com.example.composetask.util.InitialsAvatar
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.example.composetask.auth.viewmodel.AuthViewModel
+import com.example.composetask.auth.model.LoginState
+import com.example.composetask.core.util.InitialsAvatar
 import kotlin.Unit
 
 @Composable

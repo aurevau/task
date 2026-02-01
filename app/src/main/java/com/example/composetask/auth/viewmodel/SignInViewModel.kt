@@ -1,6 +1,8 @@
-package com.example.composetask.presentation.sign_in
+package com.example.composetask.auth.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.example.composetask.auth.model.SignInResult
+import com.example.composetask.auth.model.SignInState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

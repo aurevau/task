@@ -1,10 +1,9 @@
-package com.example.composetask
+package com.example.composetask.home
 
 import androidx.lifecycle.ViewModel
-import com.example.composetask.model.Channel
+import com.example.composetask.home.model.Channel
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
-
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -1,7 +1,7 @@
 package com.example.composetask.chat
 
 import androidx.lifecycle.ViewModel
-import com.example.composetask.model.Message
+import com.example.composetask.chat.model.Message
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth

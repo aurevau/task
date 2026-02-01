@@ -1,4 +1,4 @@
-package com.example.composetask.presentation.sign_in
+package com.example.composetask.home.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,7 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.composetask.HomeViewModel
+import com.example.composetask.home.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

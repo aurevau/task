@@ -1,6 +1,4 @@
-package com.example.composetask.model
-
-
+package com.example.composetask.home.model
 
 data class Channel(
     val id: String = "",

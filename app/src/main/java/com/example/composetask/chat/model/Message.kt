@@ -1,4 +1,4 @@
-package com.example.composetask.model
+package com.example.composetask.chat.model
 
 data class Message(
     val id: String = "",

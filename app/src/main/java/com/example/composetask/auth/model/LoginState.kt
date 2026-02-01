@@ -1,4 +1,4 @@
-package com.example.composetask.login
+package com.example.composetask.auth.model
 
 sealed class LoginState {
     object Idle: LoginState()
