@@ -18,11 +18,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.composetask.auth.AuthViewModel
+import com.example.composetask.chat.ChatScreen
 import com.example.composetask.login.LoginScreen
 import com.example.composetask.login.AuthTabs
 import com.example.composetask.presentation.sign_in.HomeScreen
@@ -174,6 +177,15 @@ fun AuthApp(
                             }
                         }
                     )
+                }
+                composable("chat/{channelId}", arguments = listOf(
+                    navArgument("channelId"){
+                        type = NavType.StringType
+                    }
+                )) {
+                    val channelId = it.arguments?.getString("channelId") ?: ""
+                    ChatScreen(navController, channelId)
+
                 }
 
             }
