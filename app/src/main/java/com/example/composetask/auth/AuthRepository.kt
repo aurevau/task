@@ -1,6 +1,7 @@
 package com.example.composetask.auth
 
 import android.net.Uri
+import com.example.composetask.User
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
@@ -15,7 +16,5 @@ interface AuthRepository {
     fun getCurrentUser(): FirebaseUser?
 
     suspend fun updateProfile(username: String, photoUrl: String?)
-
-
-
+    fun getUserDataFromAuth(): User?
 }

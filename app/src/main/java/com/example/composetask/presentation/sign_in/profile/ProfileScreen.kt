@@ -21,12 +21,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.composetask.presentation.sign_in.UserData
+import com.example.composetask.User
 import com.example.composetask.util.InitialsAvatar
 
 @Composable
 fun ProfileScreen(
-    userData: UserData?,
+    userData: User?,
     onSignOut: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()
@@ -46,13 +46,17 @@ fun ProfileScreen(
 //        }
 
         when {
-            !userData?.profilePictureUrl.isNullOrBlank() -> {
-                AsyncImage(model = userData.profilePictureUrl,
-                contentDescription = "Profile picture",
-                modifier = Modifier
-                    .size(150.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop)
+            userData?.profilePictureUrl
+                ?.takeIf { it.isNotBlank() && it != "null" } != null -> {
+
+                AsyncImage(
+                    model = userData.profilePictureUrl,
+                    contentDescription = "Profile picture",
+                    modifier = Modifier
+                        .size(150.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
             }
 
             !userData?.username.isNullOrBlank() -> {
@@ -69,6 +73,7 @@ fun ProfileScreen(
                 )
             }
         }
+
 
         Spacer(modifier = Modifier.height(16.dp))
 

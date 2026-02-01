@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.IntentSender
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.composetask.User
 import com.example.composetask.login.LoginState
 import com.example.composetask.presentation.sign_in.GoogleAuthUiClient
 import com.google.firebase.auth.FirebaseUser
@@ -22,20 +23,20 @@ class AuthViewModel @Inject constructor(
 ): ViewModel() {
     private val _authProvider = MutableStateFlow<AuthProvider?>(null)
     val authProvider: StateFlow<AuthProvider?> = _authProvider
-    private val _currentUser = MutableStateFlow<FirebaseUser?>(null)
-    val currentUser: StateFlow<FirebaseUser?> = _currentUser
+    private val _currentUser = MutableStateFlow<User?>(null)
+    val currentUser: StateFlow<User?> = _currentUser
 
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
     val loginState: StateFlow<LoginState> = _loginState
 
     init {
-        val user = authRepository.getCurrentUser()
-        _currentUser.value = user
+        val firebaseUser = authRepository.getCurrentUser()
+        _currentUser.value = authRepository.getUserDataFromAuth()
 
-        val isGoogle = user?.providerData?.any { it.providerId == "google.com" } == true
+        val isGoogle = firebaseUser?.providerData?.any { it.providerId == "google.com" } == true
         _authProvider.value =
             when {
-                user == null -> null
+                firebaseUser == null -> null
                 isGoogle -> AuthProvider.GOOGLE
                 else -> AuthProvider.EMAIL
             }
@@ -47,7 +48,7 @@ class AuthViewModel @Inject constructor(
 
             try {
                 authRepository.login(email, password)
-                _currentUser.value = authRepository.getCurrentUser()
+                _currentUser.value = authRepository.getUserDataFromAuth()
                 _loginState.value = LoginState.Success
                 _authProvider.value = AuthProvider.EMAIL
             } catch (exception: Exception) {
@@ -64,8 +65,7 @@ class AuthViewModel @Inject constructor(
             try {
                 authRepository.signUp(email, password)
                 authRepository.updateProfile(username, photoUrl)
-                val updatedUser = authRepository.getCurrentUser()
-                _currentUser.value = updatedUser
+                _currentUser.value = authRepository.getUserDataFromAuth()
                 _authProvider.value = AuthProvider.EMAIL
                 _loginState.value = LoginState.Success
 
@@ -93,7 +93,8 @@ class AuthViewModel @Inject constructor(
                 val signInResult = googleAuthUiClient.signInWithIntent(data)
 
                 if(signInResult.data != null) {
-                    _currentUser.value = authRepository.getCurrentUser()
+                    authRepository.getCurrentUser()?.reload()
+                    _currentUser.value = authRepository.getUserDataFromAuth()
                     _authProvider.value = AuthProvider.GOOGLE
                     _loginState.value = LoginState.Success
                 } else {

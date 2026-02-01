@@ -1,6 +1,8 @@
 package com.example.composetask.auth
 
 import android.net.Uri
+import android.util.Log
+import com.example.composetask.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -36,6 +38,37 @@ class FirebaseAuthRepository @Inject constructor(
             }
         ).await()
         user.reload().await()
+
+    }
+
+    override fun getUserDataFromAuth(): User? {
+
+
+        val user = FirebaseAuth.getInstance().currentUser
+
+        return user?.let {
+            Log.d(
+                "AUTH",
+                "uid=${it.uid}, display=${it.displayName}, email=${it.email}, photo=${it.photoUrl}"
+            )
+            val name =
+                it.displayName
+                    ?: it.email
+                    ?: it.uid.take(6)
+
+
+            val photo =
+                it.photoUrl
+                    ?.toString()
+                    ?.takeIf { url ->
+                        url.isNotBlank() && url != "null"
+                    }
+            User(
+                username = name,
+                userId = it.uid,
+                profilePictureUrl = photo
+            )
+        }
 
     }
 

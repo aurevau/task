@@ -18,11 +18,14 @@ import androidx.compose.ui.unit.dp
 fun getInitials(username: String): String {
     return username
         .trim()
-        .split(" ")
-        .filter { it.isNotEmpty() }
+        .split(Regex("\\s+"))
+        .filter { it.isNotBlank() }
         .take(2)
-        .joinToString("") {it.first().uppercase()  }
-
+        .mapNotNull { word ->
+            word.firstOrNull()?.uppercase()
+        }
+        .joinToString("")
+        .ifBlank { "?" }
 }
 
 

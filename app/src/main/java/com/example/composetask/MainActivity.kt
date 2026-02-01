@@ -25,10 +25,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.composetask.auth.AuthViewModel
 import com.example.composetask.login.LoginScreen
 import com.example.composetask.login.AuthTabs
-import com.example.composetask.login.LoginState
 import com.example.composetask.presentation.sign_in.HomeScreen
 import com.example.composetask.presentation.sign_in.SignUpScreen
-import com.example.composetask.presentation.sign_in.UserData
 import com.example.composetask.presentation.sign_in.profile.ProfileScreen
 import com.example.composetask.ui.theme.AppTheme
 import com.example.composetask.ui.theme.ComposeTaskTheme
@@ -166,13 +164,7 @@ fun AuthApp(
                     val user by authViewModel.currentUser.collectAsStateWithLifecycle()
 
                     ProfileScreen(
-                        userData = user?.let{
-                            UserData(
-                                userId = it.uid,
-                                username = it.displayName ?: it.email ?: "?",
-                                profilePictureUrl = it.photoUrl?.toString()
-                            )
-                        },
+                        userData = user,
                         onSignOut = {
                             scope.launch {
                                 authViewModel.signOut()
