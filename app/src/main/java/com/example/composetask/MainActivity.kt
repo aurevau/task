@@ -30,6 +30,7 @@ import com.example.composetask.auth.ui.LoginScreen
 import com.example.composetask.auth.ui.AuthTabs
 import com.example.composetask.home.ui.HomeScreen
 import com.example.composetask.auth.ui.SignUpScreen
+import com.example.composetask.navigation.NavGraph
 import com.example.composetask.presentation.sign_in.profile.ProfileScreen
 import com.example.composetask.ui.theme.AppTheme
 import com.example.composetask.ui.theme.ComposeTaskTheme
@@ -53,7 +54,7 @@ class MainActivity : ComponentActivity() {
             ComposeTaskTheme(
                 theme = selectedTheme
             ) {
-                AuthApp(
+                NavGraph(
                     currentTheme = selectedTheme,
                     onThemeSelected = { selectedTheme = it }
                 )
@@ -66,134 +67,3 @@ class MainActivity : ComponentActivity() {
 }
 
 
-@Composable
-fun AuthApp(
-    currentTheme: AppTheme,
-    onThemeSelected: (AppTheme) -> Unit
-) {
-
-    val navController = rememberNavController()
-    val scope = rememberCoroutineScope()
-    NavHost(navController, startDestination = "auth") {
-            navigation(startDestination = "sign_in", route = "auth") {
-                composable("sign_in"){
-                    Column {
-                        AuthTabs(navController)
-
-                        val authViewModel: AuthViewModel = hiltViewModel()
-                        val state by authViewModel.loginState.collectAsStateWithLifecycle()
-
-                        val currentUser by authViewModel.currentUser.collectAsStateWithLifecycle()
-
-                        LaunchedEffect(currentUser) {
-                            if (currentUser != null) {
-                                navController.navigate("home") {
-                                    popUpTo("auth") { inclusive = true }
-                                }
-                            }
-                        }
-
-                        val launcher = rememberLauncherForActivityResult(
-                            contract = ActivityResultContracts.StartIntentSenderForResult(),
-                            onResult = {result ->
-                                if (result.resultCode == RESULT_OK) {
-                                    authViewModel.handleGoogleSignInResult(result.data)
-                                } else {
-                                    authViewModel.onGoogleSignInCanceled()
-                                }
-                            }
-                        )
-
-//                        LaunchedEffect(state) {
-//                            if (state is LoginState.Success) {
-//                                navController.navigate("profile") {
-//                                    popUpTo("sign_in") { inclusive = true }
-//                                }
-//                            }
-//                        }
-
-                        LoginScreen(
-                            state = state,
-                            onSignInWithGoogleClick = {
-                                scope.launch {
-                                    val intentSender = authViewModel.getGoogleSignInIntent()
-
-
-                                    if (intentSender != null) {
-                                        launcher.launch(
-                                            IntentSenderRequest.Builder(intentSender).build()
-                                        )
-                                    }
-                                }
-
-                            }, onEmailSignIn = { email, password ->
-                                authViewModel.login(email, password)
-                            },
-                            currentTheme = currentTheme,
-                            onThemeSelected = onThemeSelected,
-                            onSignUpClick = {
-                                navController.navigate("signup") {  popUpTo("auth") { inclusive = false }}
-                            }
-                        )
-                    }
-
-
-                }
-                composable("signup") {
-                    val authViewModel: AuthViewModel = hiltViewModel()
-                    val state by authViewModel.loginState.collectAsStateWithLifecycle()
-                    val currentUser by authViewModel.currentUser.collectAsStateWithLifecycle()
-
-                    LaunchedEffect(currentUser) {
-                        if(currentUser != null) {
-                            navController.navigate("home") {
-                                popUpTo("auth") {inclusive = true}
-                            }
-                        }
-                    }
-                    Column {
-                        AuthTabs(navController)
-                        SignUpScreen(
-                            state = state,
-                            onSignUp = {username, email, password, photoUrl ->
-                                authViewModel.signUp(username, email, password, photoUrl)
-                            }, onNavigateToLogin = {navController.navigate("sign_in")})
-                    }
-                }
-
-                composable("home") {HomeScreen(navController)}
-                composable("profile") {
-                    val authViewModel: AuthViewModel = hiltViewModel()
-                    val user by authViewModel.currentUser.collectAsStateWithLifecycle()
-
-                    ProfileScreen(
-                        userData = user,
-                        onSignOut = {
-                            scope.launch {
-                                authViewModel.signOut()
-                                navController.navigate("sign_in") {
-                                    popUpTo("profile") { inclusive = true }
-                                }
-                            }
-                        }
-                    )
-                }
-                composable("chat/{channelId}", arguments = listOf(
-                    navArgument("channelId"){
-                        type = NavType.StringType
-                    }
-                )) {
-                    val channelId = it.arguments?.getString("channelId") ?: ""
-                    ChatScreen(navController, channelId)
-
-                }
-
-            }
-
-
-            }
-
-
-
-
-}
