@@ -84,7 +84,7 @@ fun AuthApp(
 
                         LaunchedEffect(currentUser) {
                             if (currentUser != null) {
-                                navController.navigate("profile") {
+                                navController.navigate("home") {
                                     popUpTo("auth") { inclusive = true }
                                 }
                             }
@@ -143,7 +143,7 @@ fun AuthApp(
 
                     LaunchedEffect(currentUser) {
                         if(currentUser != null) {
-                            navController.navigate("profile") {
+                            navController.navigate("home") {
                                 popUpTo("auth") {inclusive = true}
                             }
                         }
