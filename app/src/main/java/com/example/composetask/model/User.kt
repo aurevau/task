@@ -1,4 +1,4 @@
-package com.example.composetask
+package com.example.composetask.model
 
 data class User(
     val username: String?,

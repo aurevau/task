@@ -1,8 +1,9 @@
-package com.example.composetask.auth
+package com.example.composetask.auth.data
 
 import android.net.Uri
 import android.util.Log
-import com.example.composetask.User
+import com.example.composetask.model.User
+import com.example.composetask.auth.domain.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth

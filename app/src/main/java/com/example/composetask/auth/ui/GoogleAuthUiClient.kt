@@ -1,9 +1,11 @@
-package com.example.composetask.presentation.sign_in
+package com.example.composetask.auth.ui
 
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import com.example.composetask.R
+import com.example.composetask.auth.model.SignInResult
+import com.example.composetask.auth.model.UserData
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.GoogleAuthProvider

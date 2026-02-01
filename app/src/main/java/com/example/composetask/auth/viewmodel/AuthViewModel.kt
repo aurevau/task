@@ -1,19 +1,18 @@
-package com.example.composetask.auth
+package com.example.composetask.auth.viewmodel
 
 import android.content.Intent
 import android.content.IntentSender
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.composetask.User
-import com.example.composetask.login.LoginState
-import com.example.composetask.presentation.sign_in.GoogleAuthUiClient
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.example.composetask.auth.domain.AuthProvider
+import com.example.composetask.auth.domain.AuthRepository
+import com.example.composetask.auth.model.LoginState
+import com.example.composetask.auth.ui.GoogleAuthUiClient
+import com.example.composetask.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel

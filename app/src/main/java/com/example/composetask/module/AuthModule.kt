@@ -1,9 +1,9 @@
 package com.example.composetask.module
 
 import android.content.Context
-import com.example.composetask.auth.AuthRepository
-import com.example.composetask.auth.FirebaseAuthRepository
-import com.example.composetask.presentation.sign_in.GoogleAuthUiClient
+import com.example.composetask.auth.domain.AuthRepository
+import com.example.composetask.auth.data.FirebaseAuthRepository
+import com.example.composetask.auth.ui.GoogleAuthUiClient
 import com.google.android.gms.auth.api.identity.Identity
 import dagger.Binds
 import dagger.Module

@@ -18,15 +18,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.example.composetask.auth.AuthViewModel
-import com.example.composetask.login.LoginScreen
-import com.example.composetask.login.AuthTabs
-import com.example.composetask.presentation.sign_in.HomeScreen
-import com.example.composetask.presentation.sign_in.SignUpScreen
+import androidx.navigation.navArgument
+import com.example.composetask.auth.viewmodel.AuthViewModel
+import com.example.composetask.chat.ui.ChatScreen
+import com.example.composetask.auth.ui.LoginScreen
+import com.example.composetask.auth.ui.AuthTabs
+import com.example.composetask.home.ui.HomeScreen
+import com.example.composetask.auth.ui.SignUpScreen
 import com.example.composetask.presentation.sign_in.profile.ProfileScreen
 import com.example.composetask.ui.theme.AppTheme
 import com.example.composetask.ui.theme.ComposeTaskTheme
@@ -84,7 +87,7 @@ fun AuthApp(
 
                         LaunchedEffect(currentUser) {
                             if (currentUser != null) {
-                                navController.navigate("profile") {
+                                navController.navigate("home") {
                                     popUpTo("auth") { inclusive = true }
                                 }
                             }
@@ -143,7 +146,7 @@ fun AuthApp(
 
                     LaunchedEffect(currentUser) {
                         if(currentUser != null) {
-                            navController.navigate("profile") {
+                            navController.navigate("home") {
                                 popUpTo("auth") {inclusive = true}
                             }
                         }
@@ -174,6 +177,15 @@ fun AuthApp(
                             }
                         }
                     )
+                }
+                composable("chat/{channelId}", arguments = listOf(
+                    navArgument("channelId"){
+                        type = NavType.StringType
+                    }
+                )) {
+                    val channelId = it.arguments?.getString("channelId") ?: ""
+                    ChatScreen(navController, channelId)
+
                 }
 
             }

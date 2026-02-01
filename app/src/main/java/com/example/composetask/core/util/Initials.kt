@@ -1,4 +1,4 @@
-package com.example.composetask.util
+package com.example.composetask.core.util
 
 
 import androidx.compose.foundation.background
