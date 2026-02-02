@@ -67,7 +67,7 @@ fun HomeScreen(navController: NavHostController){
                 .clickable {
                     addChannel.value = true
                 }) {
-                Text(text = "Add Channel",
+                Text(text = "Add Channel", fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .padding(16.dp),
                     color = MaterialTheme.colorScheme.background)
@@ -98,18 +98,6 @@ fun HomeScreen(navController: NavHostController){
                         ChannelItem(channel.name, {
                             navController.navigate("chat/${channel.id}")
                         })
-//                        Text(modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(8.dp)
-//                            .clip(RoundedCornerShape(16.dp))
-//                            .background(MaterialTheme.colorScheme.onBackground)
-//                            .clickable {
-//
-//                            }
-//                            .padding(16.dp)
-//                            ,
-//                            color = MaterialTheme.colorScheme.background
-//                            ,text = channel.name)
                     }
                 }
             }
@@ -163,9 +151,10 @@ fun AddChannelDialog(onAddChannel: (String) -> Unit) {
     val channelName = remember {
         mutableStateOf("")
     }
-    Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.Center,
+    Column(modifier = Modifier.padding(16.dp)
+        , verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "Add Channel")
+        Text(text = "Add Channel", fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.padding(8.dp))
         TextField(value = channelName.value, onValueChange = {
             channelName.value = it
@@ -173,7 +162,7 @@ fun AddChannelDialog(onAddChannel: (String) -> Unit) {
             singleLine = true)
         Spacer(modifier = Modifier.padding(8.dp))
         Button(onClick = {onAddChannel(channelName.value)}, modifier = Modifier.fillMaxWidth()) {
-            Text(text = "Add")
+            Text(text = "Add", fontWeight = FontWeight.SemiBold)
         }
     }
 
